@@ -20,5 +20,9 @@ public class Sensor extends Actor
     {
         // Add your action code here.
     }	
+    
+    public boolean getTouch(){
+    	return isTouching(Wall.class);
+    }
        
 }

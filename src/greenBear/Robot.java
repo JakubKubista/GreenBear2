@@ -64,7 +64,40 @@ public class Robot extends Actor
 	     */
 	    public void act() 
 	    {
-
+	    	if(!frontSensor.getTouch()){
+	    		drive(0);
+	    	} else {
+	    		rotate(0,90);
+	    	}
+	    	
+	    }
+	    
+	    private void drive(int direction){
+	    	if(direction == 0){
+	    		speedL = 1;
+	    		speedR = 1;
+	    	}else{
+	    		speedL = -1;
+	    		speedR = -1;
+	    	}
+    		move();
+	    }
+	    
+	    private void rotate(int direction, int angle){
+	    	//0 = doleva, ostatni doprava
+	    	if(direction == 0){
+	    		for(int i = 0; i < angle; i++){
+		    		speedR = 0.5;
+		    		speedL = -0.5;
+		    		move();
+	    		}
+	    	}else{
+	    		for(int i = 0; i < angle; i++){
+		    		speedR = -0.5;
+		    		speedL = 0.5;
+		    		move();
+	    		}
+	    	}
 	    }
 	    
 	    private void move() {
