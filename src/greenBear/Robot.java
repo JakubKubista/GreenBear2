@@ -21,6 +21,8 @@ public class Robot extends Actor
 	    private double x;
 	    private double y;
 	    
+	    private static final int STEP = 30;
+	    
 	    private Sensor frontSensor = new Sensor();
 	    private Sensor rearSensor = new Sensor();
 	    private Sensor leftSensor = new Sensor();
@@ -62,16 +64,27 @@ public class Robot extends Actor
 	     * Act - do whatever the Robot wants to do. This method is called whenever
 	     * the 'Act' or 'Run' button gets pressed in the environment.
 	     */
+	    int count = 0;
 	    public void act() 
 	    {
+	    	// posun podel zdi dle senzoru
 	    	if(!frontSensor.getTouch()){
 	    		drive(0);
 	    	} else {
 	    		rotate(0,90);
 	    	}
 	    	
+	    	
+	    	// posun o 1 krok
+	    	/*
+    		if(count == 0){
+    			driveDistance(1,1);
+    			count++;
+    		}
+	    	*/
+	    	
 	    }
-	    
+	    // robot pojede pouze dopredu nebo dozadu
 	    private void drive(int direction){
 	    	if(direction == 0){
 	    		speedL = 1;
@@ -83,6 +96,7 @@ public class Robot extends Actor
     		move();
 	    }
 	    
+	    // zakladni otoceni
 	    private void rotate(int direction, int angle){
 	    	//0 = doleva, ostatni doprava
 	    	if(direction == 0){
@@ -96,6 +110,30 @@ public class Robot extends Actor
 		    		speedR = -0.5;
 		    		speedL = 0.5;
 		    		move();
+	    		}
+	    	}
+	    }
+	    
+	    // posun o statickou vzdalenost
+	    private void moveByDistance(){
+	    	for(int i = 0;i <= STEP; i++ ){
+	    		move();
+	    	}
+	    }
+	    
+	    // posun o zadanou vzdalenost
+	    private void driveDistance(int distance,int direction){
+	    	if (direction == 0){
+	    		for (int i = 0; i < distance; i++){
+	    			speedR = 1;
+	    			speedL = 1;
+	    			move();	
+	    		}
+    		}else{
+	    		for (int i = 0; i < distance; i++){
+	    			speedR = 1;
+	    			speedL = 1;
+	    			move();
 	    		}
 	    	}
 	    }
