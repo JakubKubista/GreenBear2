@@ -1,0 +1,23 @@
+#Greenfoot project file
+class.greenBear.Bear.image=images/bear.png
+class.greenBear.Sensor.image=images/line_sensor.png
+class.greenBear.RescuePlace.image=images/weave.jpg
+class.greenBear.Robot.image=images/robot.png
+class.greenBear.Wall.image=images/line.png
+editor.fx.0.height=0
+editor.fx.0.width=0
+editor.fx.0.x=0
+editor.fx.0.y=0
+mainWindow.height=600
+mainWindow.width=850
+mainWindow.x=529
+mainWindow.y=430
+package.numDependencies=0
+package.numTargets=0
+project.charset=UTF-8
+readme.height=58
+readme.name=@README
+readme.width=47
+readme.x=10
+readme.y=10
+version=3.0.0
