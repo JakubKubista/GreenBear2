@@ -80,51 +80,6 @@ public class Robot extends Actor
     		}
 	    }
 	    
-	    private void initialize() {
-	    	if (init) {
-	    	    defaultX = (int)x;
-	    	    defaultY = (int)y;   
-	    	    init = false;
-	    	}
-	    }
-	    
-	    private void detectBear(){
-			if(bear != null && bear.getY()==(int)y && !bearDetected) {
-    			rotate(1,90);
-    			bearDetected = true;
-			}
-	    }
-
-	    private void tryCatchBear(){
-	    	if (bearDetected  && bear.getX()==(int)x && !bearCaught) {
-    			rotate(1,90);
-    			bearCaught = true;
-			}
-	    }
-	    
-	    private void detectBase(){
-			if(defaultX==(int)x && (int)y<=260 && bearCaught && !baseDetected) {
-    			rotate(1,90);
-				System.out.println("baseDetected");
-    			baseDetected = true;
-			}
-	    }
-	    
-	    private void ended() {
-			if (baseDetected && defaultX==(int)x && defaultY+2>=(int)y && !end) {
-    			rotate(1,180);
-    			end = true;
-			}
-	    }
-	    
-	    public void workflow() {
-	    	initialize();
-			detectBear();
-			tryCatchBear();
-			detectBase();
-			ended();	    	
-	    }
-	    
 	    /**
 	     * Act - do whatever the Robot wants to do. This method is called whenever
 	     * the 'Act' or 'Run' button gets pressed in the environment.
@@ -160,6 +115,23 @@ public class Robot extends Actor
 	    	}	    	
 	    }
 	    
+	    public void workflow() {
+	    	initialize();
+			detectBear();
+			tryCatchBear();
+			detectBase();
+			ended();	    	
+	    }
+	    
+	    
+	    private void initialize() {
+	    	if (init) {
+	    	    defaultX = (int)x;
+	    	    defaultY = (int)y;   
+	    	    init = false;
+	    	}
+	    }
+	    
 	    private void clearMemory(){
     		latestX = new double[20];
     		latestY = new double[20];
@@ -174,6 +146,35 @@ public class Robot extends Actor
     		count++;
 		    System.out.println("add: "+Math.round(x)+";"+Math.round(y));	
 	    }
+	    
+	    private void detectBear(){
+			if(bear != null && bear.getY()==(int)y && !bearDetected) {
+    			rotate(1,90);
+    			bearDetected = true;
+			}
+	    }
+
+	    private void tryCatchBear(){
+	    	if (bearDetected  && bear.getX()==(int)x && !bearCaught) {
+    			rotate(1,90);
+    			bearCaught = true;
+			}
+	    }
+	    
+	    private void detectBase(){
+			if(defaultX==(int)x && (int)y<=260 && bearCaught && !baseDetected) {
+    			rotate(1,90);
+				System.out.println("baseDetected");
+    			baseDetected = true;
+			}
+	    }
+	    
+	    private void ended() {
+			if (baseDetected && defaultX==(int)x && defaultY+2>=(int)y && !end) {
+    			rotate(1,180);
+    			end = true;
+			}
+	    }  
 	        
 	    // basic turn
 	    private void rotate(int direction, int angle){
