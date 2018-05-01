@@ -23,8 +23,10 @@ public class Robot extends Actor
 	    
 	    private static final int STEP = 30;
 	    private boolean changeover = false;
-	    private double latestX[] = new double[6];
-	    private double latestY[] = new double[6];
+	    private double latestX[] = new double[20];
+	    private double latestY[] = new double[20];
+	    private Bear bear = null;
+	    private int bearDistance;
 	    
 	    private Sensor frontSensor = new Sensor();
 	    private Sensor rearSensor = new Sensor();
@@ -93,18 +95,19 @@ public class Robot extends Actor
 	    		      }
 	    		     if (changeover) {
  			    		rotate(1,90);	
- 			    		latestX = new double[6];
- 			    		latestY = new double[6];
- 			    		changeover = false;
-		    		    System.out.println("looped");
+ 			    		clearMemory();
 	    		     }else {
 	 	    			rotate(0,90);	
-			    		latestX[count] = Math.round(x);
-			    		latestY[count] = Math.round(y);	
-			    		count++;
-		    		    System.out.println("add: "+Math.round(x)+";"+Math.round(y));	
+	 	    			addToMemory();
 	    		     }
 	    		}
+	    		
+	    		if (getNeighbours(300, false, Bear.class).size() > 0) {    			
+	    			bear = getWorld().getObjects(Bear.class).get(0);
+	    			System.out.println("bearX: "+bear.getX());
+	    			System.out.println("bearY: "+bear.getY());
+	    		}
+	    		
 	    		/*
 	    		if (!changeover) {
 		    		rotate(0,90);	
@@ -132,6 +135,21 @@ public class Robot extends Actor
     		}
 	    	*/
 	    	
+	    }
+	    
+	    private void clearMemory(){
+    		latestX = new double[20];
+    		latestY = new double[20];
+    		count = 0;
+    		changeover = false;
+		    System.out.println("looped");
+	    }
+	    
+	    private void addToMemory(){
+    		latestX[count] = Math.round(x);
+    		latestY[count] = Math.round(y);	
+    		count++;
+		    System.out.println("add: "+Math.round(x)+";"+Math.round(y));	
 	    }
 	        
 	    // basic turn
