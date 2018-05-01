@@ -27,8 +27,8 @@ public class Robot extends Actor
 	    private boolean baseDetected = false;
 	    
 	    
-	    private double defaultX;
-	    private double defaultY;
+	    private int defaultX;
+	    private int defaultY;
 	    private boolean changeover = false;
 	    private double latestX[] = new double[20];
 	    private double latestY[] = new double[20];
@@ -82,8 +82,8 @@ public class Robot extends Actor
 	    
 	    private void initialize() {
 	    	if (init) {
-	    	    defaultX = getX();
-	    	    defaultY = getY();   
+	    	    defaultX = (int)x;
+	    	    defaultY = (int)y;   
 	    	    init = false;
 	    	}
 	    }
@@ -103,16 +103,17 @@ public class Robot extends Actor
 	    }
 	    
 	    private void detectBase(){
-			if((int)defaultX==(int)x && (int)y<=260 && bearCaught && !baseDetected) {
+			if(defaultX==(int)x && (int)y<=260 && bearCaught && !baseDetected) {
     			rotate(1,90);
+				System.out.println("baseDetected");
     			baseDetected = true;
 			}
 	    }
 	    
 	    private void ended() {
-			if (baseDetected && (int)defaultX == (int)x && (int)defaultY == (int)y) {
+			if (baseDetected && defaultX==(int)x && defaultY+2>=(int)y && !end) {
+    			rotate(1,180);
     			end = true;
-				System.out.println("end");
 			}
 	    }
 	    
@@ -123,6 +124,7 @@ public class Robot extends Actor
 			detectBase();
 			ended();	    	
 	    }
+	    
 	    /**
 	     * Act - do whatever the Robot wants to do. This method is called whenever
 	     * the 'Act' or 'Run' button gets pressed in the environment.
@@ -141,11 +143,7 @@ public class Robot extends Actor
 	    		}else if(rightSensor.getTouch()) {
 	    			rotate(0,90);	
 	    		}else {
-		    		System.out.println("posititon: "+Math.round(x)+";"+Math.round(y));	
-
 	    		     for (int i = 0; i < latestX.length; i++) {
-			    		 //System.out.println("compareX: "+Math.round(x)+";"+latestX[i]);
-			    		 //System.out.println("compareY: "+Math.round(y)+";"+latestY[i]);
 	    		    	 if ((latestX[i] == Math.round(x)) && 
 	    		    	     (latestY[i] == Math.round(y))) {
 	    		    		    changeover = true;
@@ -159,35 +157,7 @@ public class Robot extends Actor
 	 	    			addToMemory();
 	    		     }
 	    		}
-	    		
-	    		
-	    		/*
-	    		if (!changeover) {
-		    		rotate(0,90);	
-	    		}else {
-		    		rotate(1,90);	
-	    		}
-	    		count++;
-	    		if (count == 2) {
-		    		if (changeover) {
-			    		changeover = false;	
-		    		}else {
-			    		changeover = true;		
-		    		}
-		    		count = 0;
-	    		}
-	    		*/
-	    	}
-	    	
-	    	
-	    	// move by one step
-	    	/*
-    		if(count <= 10){
-    			moveByDynamicDistance(5,1);
-    			count++;
-    		}
-	    	*/
-	    	
+	    	}	    	
 	    }
 	    
 	    private void clearMemory(){
