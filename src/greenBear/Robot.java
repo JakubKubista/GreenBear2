@@ -21,7 +21,14 @@ public class Robot extends Actor
 	    private double x;
 	    private double y;
 	    
-	    private static final int STEP = 30;
+	    //private static final int STEP = 30;
+	    private boolean init = true;
+	    private boolean end = false;
+	    private boolean baseDetected = false;
+	    
+	    
+	    private double defaultX;
+	    private double defaultY;
 	    private boolean changeover = false;
 	    private double latestX[] = new double[20];
 	    private double latestY[] = new double[20];
@@ -73,18 +80,48 @@ public class Robot extends Actor
     		}
 	    }
 	    
-	    public void detectBear(){
+	    private void initialize() {
+	    	if (init) {
+	    	    defaultX = getX();
+	    	    defaultY = getY();   
+	    	    init = false;
+	    	}
+	    }
+	    
+	    private void detectBear(){
 			if(bear != null && bear.getY()==(int)y && !bearDetected) {
     			rotate(1,90);
     			bearDetected = true;
 			}
 	    }
 
-	    public void tryCatchBear(){
+	    private void tryCatchBear(){
 	    	if (bearDetected  && bear.getX()==(int)x && !bearCaught) {
     			rotate(1,90);
     			bearCaught = true;
 			}
+	    }
+	    
+	    private void detectBase(){
+			if((int)defaultX==(int)x && (int)y<=260 && bearCaught && !baseDetected) {
+    			rotate(1,90);
+    			baseDetected = true;
+			}
+	    }
+	    
+	    private void ended() {
+			if (baseDetected && (int)defaultX == (int)x && (int)defaultY == (int)y) {
+    			end = true;
+				System.out.println("end");
+			}
+	    }
+	    
+	    public void workflow() {
+	    	initialize();
+			detectBear();
+			tryCatchBear();
+			detectBase();
+			ended();	    	
 	    }
 	    /**
 	     * Act - do whatever the Robot wants to do. This method is called whenever
@@ -94,22 +131,23 @@ public class Robot extends Actor
 	    public void act() 
 	    {	 
 	    	if(!frontSensor.getTouch()){
-    			detectBear();
-    			tryCatchBear();
-	    		moveBasically(0);
+	    		workflow();
+    			if(!end) {
+    	    		moveBasically(0);
+    			}
 	    	} else {
 	    		if(leftSensor.getTouch()) {
 		    		rotate(1,90);	
 	    		}else if(rightSensor.getTouch()) {
 	    			rotate(0,90);	
 	    		}else {
-		    		System.out.println("frontSensorTurn: "+Math.round(x)+";"+Math.round(y));	
+		    		System.out.println("posititon: "+Math.round(x)+";"+Math.round(y));	
 
-   		    	 	System.out.println("----");
 	    		     for (int i = 0; i < latestX.length; i++) {
 			    		 //System.out.println("compareX: "+Math.round(x)+";"+latestX[i]);
 			    		 //System.out.println("compareY: "+Math.round(y)+";"+latestY[i]);
-	    		    	 if ((latestX[i] == Math.round(x)) && (latestY[i] == Math.round(y))) {
+	    		    	 if ((latestX[i] == Math.round(x)) && 
+	    		    	     (latestY[i] == Math.round(y))) {
 	    		    		    changeover = true;
 	    		    	 }
 	    		      }
@@ -197,15 +235,8 @@ public class Robot extends Actor
     		move();
 	    }
 	    
-	    // movement of static distance
-	    private void moveByStaticDistance(){
-	    	for(int i = 0;i <= STEP; i++ ){
-	    		move();
-	    	}
-	    }
-	    
-	    // movement of dynamic distance
-	    private void moveByDynamicDistance(int distance, boolean direction){
+	    // movement of distance - TRUE-front, FALSE-back
+	    private void moveByDistance(int distance, boolean direction){
 	    	if (direction){
 	    		for (int i = 0; i < distance; i++){
 	    			speedR = 1.5;
