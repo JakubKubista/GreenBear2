@@ -68,34 +68,24 @@ public class Robot extends Actor
 	    public void act() 
 	    {
 	    	// move at wall by sensor
+	    	/*
 	    	if(!frontSensor.getTouch()){
 	    		drive(0);
 	    	} else {
 	    		rotate(0,90);
 	    	}
-	    	
-	    	
-	    	// move by one step
-	    	/*
-    		if(count == 0){
-    			driveDistance(1,1);
-    			count++;
-    		}
 	    	*/
 	    	
+	    	// move by one step
+	    	
+    		if(count <= 10){
+    			moveByDynamicDistance(1,1);
+    			count++;
+    		}
+	    	
+	    	
 	    }
-	    // robot will go front or back
-	    private void drive(int direction){
-	    	if(direction == 0){
-	    		speedL = 1;
-	    		speedR = 1;
-	    	}else{
-	    		speedL = -1;
-	    		speedR = -1;
-	    	}
-    		move();
-	    }
-	    
+	        
 	    // basic turn
 	    private void rotate(int direction, int angle){
 	    	//0 = left, others right
@@ -112,17 +102,29 @@ public class Robot extends Actor
 		    		move();
 	    		}
 	    	}
+	    }      	    
+	    
+	    // robot will go front or back
+	    private void moveBasically(int direction){
+	    	if(direction == 0){
+	    		speedL = 1;
+	    		speedR = 1;
+	    	}else{
+	    		speedL = -1;
+	    		speedR = -1;
+	    	}
+    		move();
 	    }
 	    
 	    // movement of static distance
-	    private void moveByDistance(){
+	    private void moveByStaticDistance(){
 	    	for(int i = 0;i <= STEP; i++ ){
 	    		move();
 	    	}
 	    }
 	    
 	    // movement of dynamic distance
-	    private void driveDistance(int distance,int direction){
+	    private void moveByDynamicDistance(int distance,int direction){
 	    	if (direction == 0){
 	    		for (int i = 0; i < distance; i++){
 	    			speedR = 1;
@@ -136,7 +138,7 @@ public class Robot extends Actor
 	    			move();
 	    		}
 	    	}
-	    }
+	    } 
 	    
 	    private void move() {
 	        double ralpha = Math.toRadians(alpha);
@@ -154,6 +156,7 @@ public class Robot extends Actor
 	        
 	        // TODO movement with bear
 	    }
+	    
 	  	    
 	    private void repaint(){
 	        getWorld().repaint();
