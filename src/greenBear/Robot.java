@@ -27,7 +27,7 @@ public class Robot extends Actor
 	    private double latestY[] = new double[20];
 	    
 	    private Bear bear = null;
-	    private int bearDistance;
+	    private boolean bearDetected;
 	    private boolean bearCaught;
 	    
 	    private Sensor frontSensor = new Sensor();
@@ -66,17 +66,36 @@ public class Robot extends Actor
 	        leftSensor.setRotation(rot - 90);
 	        rightSensor.setRotation(rot + 90);
 	    }
+
+	    public void setBear(){
+    		if (getNeighbours(300, false, Bear.class).size() > 0) {    			
+    			bear = getWorld().getObjects(Bear.class).get(0);
+    		}
+	    }
 	    
+	    public void detectBear(){
+			if(bear != null && bear.getY()==(int)y && !bearDetected) {
+    			rotate(1,90);
+    			bearDetected = true;
+			}
+	    }
+
+	    public void tryCatchBear(){
+	    	if (bearDetected  && bear.getX()==(int)x && !bearCaught) {
+    			rotate(1,90);
+    			bearCaught = true;
+			}
+	    }
 	    /**
 	     * Act - do whatever the Robot wants to do. This method is called whenever
 	     * the 'Act' or 'Run' button gets pressed in the environment.
 	     */
 	    int count = 0;
 	    public void act() 
-	    {
-	    	// move at wall by sensor
-	    	
+	    {	 
 	    	if(!frontSensor.getTouch()){
+    			detectBear();
+    			tryCatchBear();
 	    		moveBasically(0);
 	    	} else {
 	    		if(leftSensor.getTouch()) {
@@ -88,11 +107,10 @@ public class Robot extends Actor
 
    		    	 	System.out.println("----");
 	    		     for (int i = 0; i < latestX.length; i++) {
-			    		 System.out.println("compareX: "+Math.round(x)+";"+latestX[i]);
-			    		 System.out.println("compareY: "+Math.round(y)+";"+latestY[i]);
+			    		 //System.out.println("compareX: "+Math.round(x)+";"+latestX[i]);
+			    		 //System.out.println("compareY: "+Math.round(y)+";"+latestY[i]);
 	    		    	 if ((latestX[i] == Math.round(x)) && (latestY[i] == Math.round(y))) {
 	    		    		    changeover = true;
-	    		    		    System.out.println("looped");
 	    		    	 }
 	    		      }
 	    		     if (changeover) {
@@ -104,11 +122,6 @@ public class Robot extends Actor
 	    		     }
 	    		}
 	    		
-	    		if (getNeighbours(300, false, Bear.class).size() > 0) {    			
-	    			bear = getWorld().getObjects(Bear.class).get(0);
-	    			System.out.println("bearX: "+bear.getX());
-	    			System.out.println("bearY: "+bear.getY());
-	    		}
 	    		
 	    		/*
 	    		if (!changeover) {
@@ -192,18 +205,20 @@ public class Robot extends Actor
 	    }
 	    
 	    // movement of dynamic distance
-	    private void moveByDynamicDistance(int distance,int direction){
-	    	if (direction == 0){
+	    private void moveByDynamicDistance(int distance, boolean direction){
+	    	if (direction){
 	    		for (int i = 0; i < distance; i++){
-	    			speedR = 1;
-	    			speedL = 1;
+	    			speedR = 1.5;
+	    			speedL = 1.5;
 	    			move();	
+		    		repaint();
 	    		}
     		}else{
 	    		for (int i = 0; i < distance; i++){
-	    			speedR = 1;
-	    			speedL = 1;
+	    			speedR = 1.5;
+	    			speedL = 1.5;
 	    			move();
+		    		repaint();
 	    		}
 	    	}
 	    } 
@@ -220,7 +235,8 @@ public class Robot extends Actor
 	        setLocation((int)x, (int)y);
 	        setRotation((int)alpha);
 	        setSensorLocation();
-	        setSensorRotation();
+	        setSensorRotation();   	
+    	    setBear();
 	        
 	        if(bearCaught) {
 	        	bear.setLocation((int)x, (int)y);
