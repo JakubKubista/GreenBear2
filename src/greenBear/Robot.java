@@ -22,6 +22,9 @@ public class Robot extends Actor
 	    private double y;
 	    
 	    private static final int STEP = 30;
+	    private boolean changeover = false;
+	    private double latestX[] = new double[6];
+	    private double latestY[] = new double[6];
 	    
 	    private Sensor frontSensor = new Sensor();
 	    private Sensor rearSensor = new Sensor();
@@ -68,21 +71,66 @@ public class Robot extends Actor
 	    public void act() 
 	    {
 	    	// move at wall by sensor
-	    	/*
+	    	
 	    	if(!frontSensor.getTouch()){
-	    		drive(0);
+	    		moveBasically(0);
 	    	} else {
-	    		rotate(0,90);
+	    		if(leftSensor.getTouch()) {
+		    		rotate(1,90);	
+	    		}else if(rightSensor.getTouch()) {
+	    			rotate(0,90);	
+	    		}else {
+		    		System.out.println("frontSensorTurn: "+Math.round(x)+";"+Math.round(y));	
+
+   		    	 	System.out.println("----");
+	    		     for (int i = 0; i < latestX.length; i++) {
+			    		 System.out.println("compareX: "+Math.round(x)+";"+latestX[i]);
+			    		 System.out.println("compareY: "+Math.round(y)+";"+latestY[i]);
+	    		    	 if ((latestX[i] == Math.round(x)) && (latestY[i] == Math.round(y))) {
+	    		    		    changeover = true;
+	    		    		    System.out.println("looped");
+	    		    	 }
+	    		      }
+	    		     if (changeover) {
+ 			    		rotate(1,90);	
+ 			    		latestX = new double[6];
+ 			    		latestY = new double[6];
+ 			    		changeover = false;
+		    		    System.out.println("looped");
+	    		     }else {
+	 	    			rotate(0,90);	
+			    		latestX[count] = Math.round(x);
+			    		latestY[count] = Math.round(y);	
+			    		count++;
+		    		    System.out.println("add: "+Math.round(x)+";"+Math.round(y));	
+	    		     }
+	    		}
+	    		/*
+	    		if (!changeover) {
+		    		rotate(0,90);	
+	    		}else {
+		    		rotate(1,90);	
+	    		}
+	    		count++;
+	    		if (count == 2) {
+		    		if (changeover) {
+			    		changeover = false;	
+		    		}else {
+			    		changeover = true;		
+		    		}
+		    		count = 0;
+	    		}
+	    		*/
 	    	}
-	    	*/
+	    	
 	    	
 	    	// move by one step
-	    	
+	    	/*
     		if(count <= 10){
-    			moveByDynamicDistance(1,1);
+    			moveByDynamicDistance(5,1);
     			count++;
     		}
-	    	
+	    	*/
 	    	
 	    }
 	        
@@ -107,11 +155,11 @@ public class Robot extends Actor
 	    // robot will go front or back
 	    private void moveBasically(int direction){
 	    	if(direction == 0){
-	    		speedL = 1;
-	    		speedR = 1;
+	    		speedL = 1.5;
+	    		speedR = 1.5;
 	    	}else{
-	    		speedL = -1;
-	    		speedR = -1;
+	    		speedL = -1.5;
+	    		speedR = -1.5;
 	    	}
     		move();
 	    }
