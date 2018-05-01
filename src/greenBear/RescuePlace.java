@@ -32,7 +32,7 @@ public class RescuePlace extends World
      */
     public RescuePlace()
     {    
-        //1px je 5mm
+        //1px = 5mm
         super(300*2, 300*2, 1);
         
         setupGrid();

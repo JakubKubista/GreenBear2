@@ -67,7 +67,7 @@ public class Robot extends Actor
 	    int count = 0;
 	    public void act() 
 	    {
-	    	// posun podel zdi dle senzoru
+	    	// move at wall by sensor
 	    	if(!frontSensor.getTouch()){
 	    		drive(0);
 	    	} else {
@@ -75,7 +75,7 @@ public class Robot extends Actor
 	    	}
 	    	
 	    	
-	    	// posun o 1 krok
+	    	// move by one step
 	    	/*
     		if(count == 0){
     			driveDistance(1,1);
@@ -84,7 +84,7 @@ public class Robot extends Actor
 	    	*/
 	    	
 	    }
-	    // robot pojede pouze dopredu nebo dozadu
+	    // robot will go front or back
 	    private void drive(int direction){
 	    	if(direction == 0){
 	    		speedL = 1;
@@ -96,9 +96,9 @@ public class Robot extends Actor
     		move();
 	    }
 	    
-	    // zakladni otoceni
+	    // basic turn
 	    private void rotate(int direction, int angle){
-	    	//0 = doleva, ostatni doprava
+	    	//0 = left, others right
 	    	if(direction == 0){
 	    		for(int i = 0; i < angle; i++){
 		    		speedR = 0.5;
@@ -114,14 +114,14 @@ public class Robot extends Actor
 	    	}
 	    }
 	    
-	    // posun o statickou vzdalenost
+	    // movement of static distance
 	    private void moveByDistance(){
 	    	for(int i = 0;i <= STEP; i++ ){
 	    		move();
 	    	}
 	    }
 	    
-	    // posun o zadanou vzdalenost
+	    // movement of dynamic distance
 	    private void driveDistance(int distance,int direction){
 	    	if (direction == 0){
 	    		for (int i = 0; i < distance; i++){
@@ -152,7 +152,7 @@ public class Robot extends Actor
 	        setSensorLocation();
 	        setSensorRotation();
 	        
-	        //sem si umístìte posouvání medvìda s robotem
+	        // TODO movement with bear
 	    }
 	  	    
 	    private void repaint(){
