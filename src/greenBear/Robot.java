@@ -21,22 +21,22 @@ public class Robot extends Actor
 	    private double x;
 	    private double y;
 	    
-	    //private static final int STEP = 30;
+	    // basic game variables
 	    private boolean init = true;
-	    private boolean end = false;
-	    private boolean baseDetected = false;
-	    
-	    
-	    private int defaultX;
-	    private int defaultY;
 	    private boolean changeover = false;
-	    private double latestX[] = new double[20];
-	    private double latestY[] = new double[20];
-	    
 	    private Bear bear = null;
 	    private boolean bearDetected;
 	    private boolean bearCaught;
+	    private boolean baseDetected = false;
+	    private boolean end = false;
 	    
+	    // robot coords memory variables
+	    private int defaultX;
+	    private int defaultY;
+	    private double latestX[] = new double[20];
+	    private double latestY[] = new double[20];
+
+	    // senzors
 	    private Sensor frontSensor = new Sensor();
 	    private Sensor rearSensor = new Sensor();
 	    private Sensor leftSensor = new Sensor();
@@ -74,6 +74,7 @@ public class Robot extends Actor
 	        rightSensor.setRotation(rot + 90);
 	    }
 
+	    // setup how to find a bear
 	    public void setBear(){
     		if (getNeighbours(300, false, Bear.class).size() > 0) {    			
     			bear = getWorld().getObjects(Bear.class).get(0);
@@ -88,7 +89,7 @@ public class Robot extends Actor
 	    public void act() 
 	    {	 
 	    	if(!frontSensor.getTouch()){
-	    		workflow();
+	    		workflow(); // call game control workflow
     			if(!end) {
     	    		moveBasically(0);
     			}
@@ -98,12 +99,14 @@ public class Robot extends Actor
 	    		}else if(rightSensor.getTouch()) {
 	    			rotate(0,90);	
 	    		}else {
+	    			// check your memory - if you came to this place try different direction
 	    		     for (int i = 0; i < latestX.length; i++) {
 	    		    	 if ((latestX[i] == Math.round(x)) && 
 	    		    	     (latestY[i] == Math.round(y))) {
 	    		    		    changeover = true;
 	    		    	 }
 	    		      }
+	    		     // different direction
 	    		     if (changeover) {
  			    		rotate(1,90);	
  			    		clearMemory();
@@ -123,7 +126,7 @@ public class Robot extends Actor
 			ended();	    	
 	    }
 	    
-	    
+	    // setup base
 	    private void initialize() {
 	    	if (init) {
 	    	    defaultX = (int)x;
@@ -131,15 +134,16 @@ public class Robot extends Actor
 	    	    init = false;
 	    	}
 	    }
-	    
+
+	    // setup base
 	    private void clearMemory(){
     		latestX = new double[20];
     		latestY = new double[20];
     		count = 0;
     		changeover = false;
-		    System.out.println("looped");
 	    }
-	    
+
+	    // add turn to memory
 	    private void addToMemory(){
     		latestX[count] = Math.round(x);
     		latestY[count] = Math.round(y);	
@@ -147,6 +151,7 @@ public class Robot extends Actor
 		    System.out.println("add: "+Math.round(x)+";"+Math.round(y));	
 	    }
 	    
+	    // in real - check by senzor
 	    private void detectBear(){
 			if(bear != null && bear.getY()==(int)y && !bearDetected) {
     			rotate(1,90);
@@ -154,6 +159,7 @@ public class Robot extends Actor
 			}
 	    }
 
+	    // y is known so try front senzor (x)
 	    private void tryCatchBear(){
 	    	if (bearDetected  && bear.getX()==(int)x && !bearCaught) {
     			rotate(1,90);
@@ -161,14 +167,15 @@ public class Robot extends Actor
 			}
 	    }
 	    
+	    // after changeover algorythm ends, at first turn go to base
 	    private void detectBase(){
 			if(defaultX==(int)x && (int)y<=260 && bearCaught && !baseDetected) {
     			rotate(1,90);
-				System.out.println("baseDetected");
     			baseDetected = true;
 			}
 	    }
 	    
+	    // came to base and turn to default position
 	    private void ended() {
 			if (baseDetected && defaultX==(int)x && defaultY+2>=(int)y && !end) {
     			rotate(1,180);
