@@ -8,8 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class Robot here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author JakubKubista
+ * @version 1.5.2018
  */
 public class Robot extends Actor
 {
