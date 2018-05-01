@@ -25,8 +25,10 @@ public class Robot extends Actor
 	    private boolean changeover = false;
 	    private double latestX[] = new double[20];
 	    private double latestY[] = new double[20];
+	    
 	    private Bear bear = null;
 	    private int bearDistance;
+	    private boolean bearCaught;
 	    
 	    private Sensor frontSensor = new Sensor();
 	    private Sensor rearSensor = new Sensor();
@@ -220,7 +222,9 @@ public class Robot extends Actor
 	        setSensorLocation();
 	        setSensorRotation();
 	        
-	        // TODO movement with bear
+	        if(bearCaught) {
+	        	bear.setLocation((int)x, (int)y);
+	        }
 	    }
 	    
 	  	    
