@@ -248,11 +248,10 @@ public class Robot extends Actor
     	    setBear();
 	        
 	        if(bearCaught) {
-	        	bear.setLocation((int)x, (int)y);
+	        	bear.setLocation((int)x, (int)y); // bear will go with robot
 	        }
 	    }
-	    
-	  	    
+	        
 	    private void repaint(){
 	        getWorld().repaint();
 	        try {
